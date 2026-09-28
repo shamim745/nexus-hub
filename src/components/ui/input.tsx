@@ -47,7 +47,7 @@ export function FormField({
 }
 
 const fieldClass =
-  "w-full rounded-lg border border-line bg-panel px-3 text-sm text-ink placeholder:text-ink-3 " +
+  "rounded-lg border border-line bg-panel px-3 text-sm text-ink placeholder:text-ink-3 " +
   "transition-colors focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 " +
   "disabled:cursor-not-allowed disabled:bg-panel-2 disabled:opacity-70 aria-[invalid=true]:border-danger-500";
 
@@ -59,12 +59,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   { className, invalid, ...props },
   ref,
 ) {
-  return <input ref={ref} aria-invalid={invalid} className={cn(fieldClass, "h-9", className)} {...props} />;
+  return <input ref={ref} aria-invalid={invalid} className={cn(fieldClass, "h-9 w-full", className)} {...props} />;
 });
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(
   function Textarea({ className, ...props }, ref) {
-    return <textarea ref={ref} className={cn(fieldClass, "py-2 leading-6", className)} {...props} />;
+    return <textarea ref={ref} className={cn(fieldClass, "w-full py-2 leading-6", className)} {...props} />;
   },
 );
 

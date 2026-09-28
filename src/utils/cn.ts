@@ -1,3 +1,5 @@
+import { twMerge } from "tailwind-merge";
+
 type ClassValue = string | number | null | undefined | false | ClassValue[];
 
 export function cn(...values: ClassValue[]): string {
@@ -13,5 +15,5 @@ export function cn(...values: ClassValue[]): string {
     out.push(String(value));
   }
 
-  return out.join(" ");
+  return twMerge(out.join(" "));
 }

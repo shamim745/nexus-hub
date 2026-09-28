@@ -53,7 +53,7 @@ export function UserFilters({ departments }: { departments: string[] }) {
           value={filters.status}
           onChange={(event) => updateFilter("status", event.target.value)}
           aria-label="Filter by status"
-          className="w-32"
+          className="w-36"
         >
           <option value="">All statuses</option>
           <option value="active">Active</option>
@@ -65,7 +65,7 @@ export function UserFilters({ departments }: { departments: string[] }) {
           value={filters.department}
           onChange={(event) => updateFilter("department", event.target.value)}
           aria-label="Filter by department"
-          className="w-40"
+          className="w-44"
         >
           <option value="">All departments</option>
           {departments.map((department) => (

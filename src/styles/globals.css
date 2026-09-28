@@ -84,6 +84,12 @@
   ::selection {
     background: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
   }
+
+  /* Grid children must shrink so wide content (charts, tables) scrolls
+     inside its card instead of stretching the whole page. */
+  .grid > * {
+    min-width: 0;
+  }
 }
 
 @layer utilities {

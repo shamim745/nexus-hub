@@ -48,7 +48,7 @@ export function IssueList() {
 
       <div className="max-h-[360px] flex-1 divide-y divide-line overflow-y-auto scrollbar-thin">
         {visible.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
+          <div className="flex min-h-full flex-col items-center justify-center gap-2 px-4 py-10 text-center">
             <CircleCheck className="size-6 text-success-500" />
             <p className="text-xs font-medium text-ink">No issues detected</p>
             <p className="text-[11px] text-ink-3">Every cell passed validation for the current ruleset.</p>

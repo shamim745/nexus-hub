@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { TableProperties } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import { Tabs, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui";
+import { EmptyState } from "@/components/common/EmptyState";
 import { cn } from "@/utils/cn";
 
 const PREVIEW_LIMIT = 12;
@@ -12,7 +14,16 @@ export function PreviewTable() {
   const outcome = useAppSelector((state) => state.pipeline.outcome);
   const [view, setView] = useState<"raw" | "cleaned">("raw");
 
-  if (!dataset) return null;
+  if (!dataset) {
+    return (
+      <EmptyState
+        icon={TableProperties}
+        title="Nothing to preview yet"
+        description="Load a CSV source above — the first rows will appear here with a source/cleaned comparison."
+        compact
+      />
+    );
+  }
 
   const cleanedActive = view === "cleaned" && Boolean(outcome);
   const headers = dataset.headers;
