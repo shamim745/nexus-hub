@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --canvas: #f5f7fb;
+  --panel: #ffffff;
+  --panel-2: #eef1f7;
+  --line: #e3e8f1;
+  --ink: #0b1120;
+  --ink-2: #4a556b;
+  --ink-3: #8b94a8;
+  --shadow-panel: 0 1px 2px rgb(11 17 32 / 0.05), 0 8px 24px -16px rgb(11 17 32 / 0.18);
+}
+
+.dark {
+  --canvas: #070b14;
+  --panel: #0d1424;
+  --panel-2: #141d31;
+  --line: #1f2b45;
+  --ink: #e8edf7;
+  --ink-2: #a3aec6;
+  --ink-3: #6b778f;
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px -24px rgb(0 0 0 / 0.7);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --color-canvas: var(--canvas);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  --color-brand-50: #eef1ff;
+  --color-brand-100: #e0e5ff;
+  --color-brand-200: #c6cfff;
+  --color-brand-300: #a3b3ff;
+  --color-brand-400: #7e8cff;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-100: #d1fae5;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-100: #fef3c7;
+  --color-danger-500: #f43f5e;
+  --color-danger-600: #e11d48;
+  --color-danger-100: #ffe4e6;
+  --color-info-500: #0ea5e9;
+  --color-info-100: #e0f2fe;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
+  }
+}
+
+@layer utilities {
+  .panel {
+    background-color: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink-3) transparent;
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--panel) 80%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .grid-glow {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklab, var(--color-brand-500) 22%, transparent) 1px,
+      transparent 0
+    );
+    background-size: 34px 34px;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.35s ease both;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-pulse-soft {
+    animation: none;
+  }
+}

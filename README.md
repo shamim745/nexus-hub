@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexusHub — Enterprise Frontend Architecture Blueprint
 
-## Getting Started
+Role-based operations console (ERP/CRM style) built to production standards: feature-driven Next.js
+App Router structure, strict TypeScript, centralized Redux Toolkit state, RBAC-guarded routing,
+server-side datatables, realtime sync and a client-side read & clean data pipeline.
 
-First, run the development server:
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Demo accounts
 
-## Learn More
+| Role    | Email            | Password  | Access                          |
+| ------- | ---------------- | --------- | ------------------------------- |
+| Admin   | admin@nexus.io   | demo1234  | Everything incl. access control |
+| Manager | manager@nexus.io | demo1234  | Overview, users, analytics, pipeline |
+| Staff   | staff@nexus.io   | demo1234  | Overview only                   |
 
-To learn more about Next.js, take a look at the following resources:
+## Architecture
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/                    # Routing only (App Router + API route handlers)
+│   ├── (auth)/login        # Public session entry
+│   ├── (dashboard)/        # Cookie-protected shell (overview, users, analytics…)
+│   └── api/                # auth · users · metrics · metrics/stream (SSE)
+├── components/
+│   ├── ui/                 # 10 reusable atomic primitives (Button, Dialog, Table…)
+│   ├── common/             # AppShell, Sidebar, Topbar, RouteGuard, Toaster, PageHeader
+│   └── forms/              # Form + debounced SearchInput wrappers
+├── features/               # Domain-driven modules (components · hooks · services · store · types)
+│   ├── auth/               # Login flow, session restore, auth API
+│   ├── users/              # Server-side datatable slice, filters, exporters
+│   ├── analytics/          # Charts, KPI cards, realtime sync hook, metrics slice
+│   └── data-pipeline/      # CSV read → analyze → clean → preview → publish
+├── hooks/                  # useDebounce, useNetworkState, useMediaQuery, useInterval
+├── lib/                    # http client (interceptors), rbac matrix, mock server & sessions
+├── store/                  # Redux root, ui/auth/notifications slices, StoreProvider
+├── styles/globals.css      # Tailwind v4 design tokens (light/dark)
+└── utils/                  # csv · pdf · date · currency · fuzzy (pure functions)
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Senior blueprint checklist
 
-## Deploy on Vercel
+- **Absolute imports** — `@/components/ui/Button`, zero deep relative chains.
+- **Zero `any`** — strict TS; every API boundary is explicitly typed (`src/types/shared.d.ts`).
+- **Reusable components** — atomic UI kit with variant/size APIs, no duplicated markup.
+- **Read & clean functionality** — CSV ingestion, issue detection (missing/duplicate/format),
+  toggleable cleaning rules, before/after preview, CSV export and publish-to-state.
+- **Global state** — Redux Toolkit slices for `ui`, `auth`, `notifications`, `users`, `metrics`,
+  `pipeline` with typed hooks (`useAppDispatch` / `useAppSelector`) and persistent UI prefs.
+- **RBAC** — one permission matrix (`src/lib/rbac.ts`) drives server redirect guards, client
+  `RouteGuard`, sidebar visibility and API authorization.
+- **Realtime** — SSE stream with automatic polling fallback, offline pause and live status badge.
+- **Responsive UI** — token-driven Tailwind v4 theme, dark mode, mobile drawer navigation.
+- **Fresh dependencies only** — Next 16, React 19, Tailwind v4, Redux Toolkit, Recharts,
+  lucide-react; no legacy or unused packages.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command              | Purpose                        |
+| -------------------- | ------------------------------ |
+| `npm run dev`        | Development server             |
+| `npm run build`      | Production build               |
+| `npm run start`      | Serve production build         |
+| `npm run lint`       | ESLint (flat config)           |
+| `npm run typecheck`  | Strict TypeScript check        |
+| `npm run format`     | Prettier normalization         |
